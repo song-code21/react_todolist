@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components';
+import { addToList } from '../actions';
 
 const AddContainer = styled.div`
     height: 15vh;
@@ -33,10 +35,36 @@ const Add = styled.button`
 `
 
 function AddTodo() {
+    const [value, setValue] = useState('')
+    const dispatch = useDispatch();
+    const state = useSelector(state => state);
+    let nextId = useRef(1);
+
+    const handleChange = (e) => {
+        setValue(e.target.value)
+    }
+    const handleAddClick = (e) => {
+        console.log(state)
+        dispatch(addToList(value, nextId.current))
+        setValue('')
+        console.log(state)
+        nextId.current++
+    }
+    const handleKeyPress = (e) => {
+        if(value.length !== 0 && e.key === 'Enter') {
+            console.log('enterClick')
+            dispatch(addToList(value, nextId.current))
+            setValue('')
+            nextId.current++
+        }
+    }
+    
+
+
     return(
         <AddContainer>
-            <Input placeholder="할일을 입력하세요" />
-            <Add>Add</Add>
+            <Input placeholder="할일을 입력하세요" onChange={handleChange} value={value} onKeyPress={handleKeyPress}/>
+            <Add onClick={handleAddClick}>Add</Add>
         </AddContainer>
     );
 }

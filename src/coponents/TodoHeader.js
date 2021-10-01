@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useSelector} from 'react-redux';
 
 const Title = styled.h1`
     font-family: "Indie flower";
@@ -25,13 +26,15 @@ function TodoHeader() {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    });  
+    }); 
+    const state = useSelector(state => state);
+    let left = state.filter(el => el.done === false);
 
     return(
         <div>
             <Title>Todo List</Title>
             <DateBox>Today: {dateString}</DateBox>
-            <LeftWork>할일 1개 남음</LeftWork>
+            <LeftWork>할일 {left.length}개 남음</LeftWork>
         </div>
     );
 }

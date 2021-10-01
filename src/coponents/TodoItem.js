@@ -2,6 +2,8 @@ import React from 'react';
 import { MdDelete } from 'react-icons/md';
 import { GiCheckMark } from "react-icons/gi";
 import styled, { css } from 'styled-components';
+import {useDispatch}  from 'react-redux';
+import {checkDone, removeFromList} from '../actions/index';
 
 const Remove = styled.div`
   display: flex;
@@ -51,7 +53,7 @@ const CheckCircle = styled.div`
 const Text = styled.div`
   flex: 1;
   font-size: 21px;
-  color: #495057;
+  color: black;
   ${props =>
     props.done &&
     css`
@@ -60,13 +62,24 @@ const Text = styled.div`
 `;
 
 
-function TodoItem({id, done, text}) {
+function TodoItem({key, todo}) {
+    // const state = useSelector(state => state);
+    const dispatch = useDispatch();
+    const handleDelete = (id) => {
+      console.log(id);
+      dispatch(removeFromList(id))
+    }
+
+    const handleCheckClick = (id, done) => {
+      console.log(done)
+      dispatch(checkDone(id, !done))
+    }
     return(
-        <TodoItemBlock>
-            <CheckCircle done={true}>{true && <GiCheckMark />}</CheckCircle>
-            <Text done={true}>{text}일단 아무거나 왜 없어!!</Text>
-            <Remove>
-                <MdDelete />
+        <TodoItemBlock key={key}>
+            <CheckCircle done={todo.done} onClick={() => handleCheckClick(todo.id, todo.done)}>{todo.done && <GiCheckMark />}</CheckCircle>
+            <Text done={false}>{todo.text}</Text>
+            <Remove >
+                <MdDelete onClick={() => handleDelete(todo.id)} />
             </Remove>
         </TodoItemBlock>
     );

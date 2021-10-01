@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TodoItem from './TodoItem';
+import {useSelector} from 'react-redux';
 
 const BodyContainer = styled.div`
     padding-top: 40px;
@@ -9,11 +10,10 @@ const BodyContainer = styled.div`
 `
 
 function TodoBody() {
+    const state = useSelector(state => state);
     return(
         <BodyContainer>
-            <TodoItem />
-            <TodoItem />
-            <TodoItem />
+            {state && state.map(todo => (<TodoItem key={todo.id} todo={todo}></TodoItem>))}
         </BodyContainer>
 
     );

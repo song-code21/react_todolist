@@ -1,14 +1,20 @@
-import {Add_To_List, Remove_From_List} from '../actions';
+import {ADD_TO_LIST, CHECK_DONE, REMOVE_FROM_LIST} from '../actions';
 import initialState from './initialState'
 
 const itemReducer = (state = initialState, action) => {
     switch(action.type) {
-        case Add_To_List: 
-        return [...state, action.item]
+        case ADD_TO_LIST: 
+        return state.concat(action.todo)
         
-        case Remove_From_List: 
-        return state.filter(el => el.id !== action.payload.id)
+        case REMOVE_FROM_LIST: 
+        return state.filter(el => el.id !== action.todo.id)
 
+        case CHECK_DONE:
+        const index = state.findIndex(el => el.id === action.todo.id)
+        const newArr = [...state]
+        newArr[index].done = action.todo.done
+        return newArr
+        
         default: return state
     }
 }
